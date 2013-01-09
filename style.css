@@ -1,0 +1,65 @@
+.container_12
+{
+    position: relative;
+    background-color: #f90;
+    border: 1px solid #000;
+    overflow-x: hidden;
+}
+
+.children
+{
+    position: relative;
+    float: left;
+    display: inline-block;
+    box-sizing: border-box;
+
+    background-color: rgba(122,122,122,0.4);
+
+    /*Set real width */
+    -webkit-box-sizing: border-box;
+
+}
+/*
+По умолчанию обертка в позиции 0
+расширяется только тогда когда происходит реакция на следующий шаг
+*/
+.wrap
+{
+    position: relative;
+    display: inline-block;
+    background-color: rgba(125,0,0,0.4);
+    width: 100%;
+    left:0;
+
+    /* Default */
+    
+    /*-webkit-transform: translate(0, 0);*/
+    -webkit-transform: translateX(0);
+  
+    
+}
+.wrap.toLeft
+{
+    width: 200%;
+    left: -100%;
+    -webkit-transform: translateX(50%);
+    -webkit-transition: -webkit-transform 1s ease;
+}
+.wrap.toRight
+{
+    width: 200%;
+    -webkit-transform: translateX(-50%);
+    -webkit-transition: -webkit-transform 1s ease;
+}
+
+.grid_3
+{
+    background-color: #f20;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.remove
+{
+    display: none;
+}
