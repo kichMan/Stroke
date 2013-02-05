@@ -22,14 +22,15 @@ header('Content-type: text/html; charset=utf-8');
         <script>
             (function(self, setElem){
                 document.ready(function(){
-                    var cont    = document.querySelector('.container_12'),
+                    var cont1    = document.querySelector('.test1'),
+                        cont2    = document.querySelector('.test2'),
                         btn_l   = document.querySelector('.btn_actionLeft'),
                         btn_r   = document.querySelector('.btn_actionRight');
 
-                    new Utk.ext.managerStep(cont);
-                    alert(cont);
-                    
-                    
+                    new Utk.ext.managerStep(cont1, 2);
+                    new Utk.ext.managerStep(cont2);
+
+                    /*
                     btn_l.onclick = function(){
                         var div = document.createElement('div');
                         cont.wrap.appendChild(div);
@@ -38,13 +39,35 @@ header('Content-type: text/html; charset=utf-8');
                     btn_r.onclick = function(){
                         alert(cont._step);
                     };
+                    */
 
                 });
             })(Utk.ui);
         </script>
     </head>
 	<body>
-        <div class="container_12">
+        <div class="container_12 test1">
+            <div class="children remove">
+                <div class="grid_3">1</div>
+                <div class="grid_3">2</div>
+                <div class="grid_3">3</div>
+                <div class="grid_3">4</div>
+            </div>
+            <div class="children">
+                <div class="grid_3">5</div>
+                <div class="grid_3">6</div>
+                <div class="grid_3">7</div>
+                <div class="grid_3">8</div>
+            </div>
+            <div class="children remove">
+                <div class="grid_3">9</div>
+                <div class="grid_3">10</div>
+                <div class="grid_3">11</div>
+                <div class="grid_3">12</div>
+            </div>
+        </div>
+
+        <div class="container_12 test2">
             <div class="children remove">
                 <div class="grid_3">1</div>
                 <div class="grid_3">2</div>
