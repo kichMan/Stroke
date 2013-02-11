@@ -1,3 +1,12 @@
+/**
+ * Need crossbrowsers method
+ * 
+ * bind
+ * classList
+ * forEach
+ * 
+ */
+
 "use strict";
 
 var Utk = Utk || {};
@@ -8,16 +17,35 @@ Utk.ext = Utk.ext || {};
     managerStep = function(elem, step){
         var ext = this;
 
-        ext._step = step++ || 0;
+        ext.source      = elem;
+        ext._step       = step++ || 0;
+        ext.trigList    = {};
+
+        //Call private function
 //        merge(elem, ext.fn);
         createWrap();
         init();
+        createEvents();
 
+        
+        /**
+         * set  должен получать либо строку, либо объект, либо число
+         */
         Object.defineProperty(elem, 'step', {
-            get: function(){ return ext._step; },
-            set: function(val){ ext._step = val; }
+            get: function(){return ext._step;},
+            set: function(step){
+                //Если символьный указатель
+                if(typeof step === 'string' && !!ext.events[step]){
+                    ext.trigger(step, true);
+                    return false;
+                }
+                ext._step = step;
+            }
         });
 
+        /*
+         * @todo Инициализировать id шага, после инициализации объекта
+         */
         function init(){
             var steps = ext.elWrap.children;
 
@@ -63,7 +91,18 @@ Utk.ext = Utk.ext || {};
             return elem;
         }
 
-        function createEvents(){}
+        function createEvents(){
+            var ev_names    = ext.events,
+                list        = ext.trigList,
+                name;
+
+            for(name in ev_names){
+                list[name] = [];
+                elem[name] = function(name, fn){
+                    list[name].push(fn);
+                }.bind(elem, name);
+            }
+        }
 
         return elem;
     };
@@ -74,18 +113,42 @@ Utk.ext = Utk.ext || {};
         elWrap          : 'div',
         clWrap          : 'wrap',
         clRemove        : 'remove',
-        
-        trigList        : {},
-        trigger         : function(){},
+
+        trigger         : function(name){
+            var arg     = Array.prototype.slice.call(arguments, 1),
+                source  = this.source,
+                ev      = this.events[name],
+                res;
+
+            arg.unshift(this);
+
+            if(!!ev && !!(res = ev.apply(source, arg))){
+                this.trigList[name].forEach(function(fn){
+                    fn.apply(source, res);
+                });
+                return true;
+            }
+
+            return false;
+        },
+
         events          : {
-            //инициализируются функции прототипа
+            /**
+             * инициализируются функции прототипа
+             * @param store Объект хранилище
+             */
             onFirst     : function(){},
             onLast      : function(){},
-            onNext      : function(){},
+            onNext      : function(store, isStart){
+                alert(arguments);
+                return false;
+            },
             onPrev      : function(){},
             onStart     : function(){},
             onFinish    : function(){}
-        }
+        },
+
+        animation       : function(){}
 
     };
 

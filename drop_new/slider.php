@@ -22,13 +22,21 @@ header('Content-type: text/html; charset=utf-8');
         <script>
             (function(self, setElem){
                 document.ready(function(){
-                    var cont1    = document.querySelector('.test1'),
-                        cont2    = document.querySelector('.test2'),
+                    var cont1   = document.querySelector('.test1'),
+                        cont2   = document.querySelector('.test2'),
                         btn_l   = document.querySelector('.btn_actionLeft'),
-                        btn_r   = document.querySelector('.btn_actionRight');
+                        btn_r   = document.querySelector('.btn_actionRight'),
+                        
+                        elem1   = new Utk.ext.managerStep(cont1, 2),
+                        elem2   = new Utk.ext.managerStep(cont2);
+                        
+                    elem1.onNext(function(arr){
+                        alert(this);
+                    });
 
-                    new Utk.ext.managerStep(cont1, 2);
-                    new Utk.ext.managerStep(cont2);
+                    elem1.step = 'onNext';
+                    alert(elem1);
+                    elem1.step = 1;
 
                     /*
                     btn_l.onclick = function(){
