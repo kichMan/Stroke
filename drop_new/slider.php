@@ -13,6 +13,7 @@ header('Content-type: text/html; charset=utf-8');
         <script>
             window.alert = function(s){console.log(s);};
         </script>
+        <script src="helpers.js"></script>
         <script src="ready.js"></script>
         <script src="animation.js"></script>
         <script src="area.js"></script>
@@ -37,6 +38,8 @@ header('Content-type: text/html; charset=utf-8');
                     elem1.step = 'onNext';
                     alert(elem1);
                     elem1.step = 1;
+
+
 
                     /*
                     btn_l.onclick = function(){
@@ -98,7 +101,7 @@ header('Content-type: text/html; charset=utf-8');
 
         <center class="navTabs">
             <button class="btn_actionLeft" data-navtabs= "toLeft">Left</button>
-            <button class="btn_actionRight" data-navtabs="toRight">Right</button>
+            <button class="btn_actionRight thisClass isClass" data-navtabs="toRight">Right</button>
         </center>
 	</body>
 </html>
