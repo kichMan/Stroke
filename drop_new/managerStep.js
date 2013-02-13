@@ -5,6 +5,9 @@
  * classList
  * forEach
  * 
+ * @link http://www.quirksmode.org/dom/w3c_core.html
+ * Element.nextElementSibling
+ * Element.previousElementSibling
  */
 
 "use strict";
@@ -22,24 +25,38 @@ Utk.ext = Utk.ext || {};
         ext.trigList    = {};
 
         //Call private function
-//        merge(elem, ext.fn);
         createWrap();
         init();
         createEvents();
 
         
         /**
-         * set  должен получать либо строку, либо объект, либо число
+         * set  должен получать либо строку, либо число
          */
         Object.defineProperty(elem, 'step', {
             get: function(){return ext._step;},
             set: function(step){
-                //Если символьный указатель
-                if(typeof step === 'string' && !!ext.events[step]){
-                    ext.trigger(step, true);
+                var command;
+
+                //Если строковый указатель
+                //@todo рассмотреть вариант с определением именно здесь
+                if(step === 'next'){
+                    step = ext._step + 1;
+                }
+                if(step === 'prev'){
+                    step = ext._step - 1;
+                }
+
+                step = step++;
+
+                if(step === ext._step || step < 0){
                     return false;
                 }
-                ext._step = step;
+
+                command = step > ext._step ? 'onNext' : 'onPrev';
+                if(!!ext.trigger(command, step)){
+                    ext._step = step;
+                }
             }
         });
 
@@ -47,7 +64,9 @@ Utk.ext = Utk.ext || {};
          * @todo Инициализировать id шага, после инициализации объекта
          */
         function init(){
-            var steps = ext.elWrap.children;
+            var steps   = ext.elWrap.children,
+                i       = 0,
+                command;
 
             if(!steps){
                 return false;
@@ -58,12 +77,9 @@ Utk.ext = Utk.ext || {};
             }
 
             //основная задача
-            for(var i = 0; i < steps.length; i++){
-                if(steps[i] !== ext.elCurr){
-                    steps[i].classList.add(ext.clRemove);
-                }else{
-                    steps[i].classList.remove(ext.clRemove);
-                }
+            for(i; i < steps.length; i++){
+                command = steps[i] !== ext.elCurr ? 'add' : 'remove';
+                steps[i].classList[command](ext.clRemove);
             }
 
             return false;
@@ -122,9 +138,9 @@ Utk.ext = Utk.ext || {};
 
             arg.unshift(this);
 
-            if(!!ev && !!(res = ev.apply(source, arg))){
+            if(!!ev && (res = ev.apply(source, arg)) !== false){
                 this.trigList[name].forEach(function(fn){
-                    fn.apply(source, res);
+                    fn.apply(source, (res instanceof Array ? res: [res]));
                 });
                 return true;
             }
@@ -135,15 +151,47 @@ Utk.ext = Utk.ext || {};
         events          : {
             /**
              * инициализируются функции прототипа
+             * временно, перемещение только по соседям
              * @param store Объект хранилище
              */
+            onNext      : function(store, step){
+                var currEl  = store.elCurr,
+                    nextEl  = currEl.nextElementSibling;
+                
+                if(!nextEl){
+                    return false;
+                }
+                
+                store.trigger('onStart');
+
+                /*test degin*/
+                alert('===========');
+                alert('next');
+                alert(arguments);
+                alert('===========');
+                /*test end*/
+                return;
+            },
+            onPrev      : function(store, step){
+                var currEl  = store.elCurr,
+                    nextEl  = currEl.previousElementSibling;
+
+                if(!nextEl){
+                    return false;
+                }
+                store.trigger('onStart', currEl, nextEl);
+                
+                /*test degin*/
+                alert('===========');
+                alert('prev');
+                alert(arguments);
+                alert('===========');
+                /*test end*/
+
+                return;
+            },
             onFirst     : function(){},
             onLast      : function(){},
-            onNext      : function(store, isStart){
-                alert(arguments);
-                return false;
-            },
-            onPrev      : function(){},
             onStart     : function(){},
             onFinish    : function(){}
         },

@@ -31,13 +31,17 @@ header('Content-type: text/html; charset=utf-8');
                         elem1   = new Utk.ext.managerStep(cont1, 2),
                         elem2   = new Utk.ext.managerStep(cont2);
                         
-                    elem1.onNext(function(arr){
+                    elem1.onForward(function(arr){
                         alert(this);
                     });
+                    
+                    elem1.onStart(function(arr){
+                        alert(arguments);
+                    });
+                    
 
-                    elem1.step = 'onNext';
-                    alert(elem1);
-                    elem1.step = 1;
+                    elem1.step = 'prev';
+//                    elem1.step = 4;
 
 
 

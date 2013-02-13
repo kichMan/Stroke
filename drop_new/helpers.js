@@ -76,9 +76,6 @@ if(!('addEventListener' in window) && !!('attachEvent' in window)){
     };
 }
 
-
-//ALL BROWSERS
-
 /**
  * Method getPrototypeOf
  */
@@ -91,6 +88,30 @@ if(!Object.getPrototypeOf){
         }
     };
 }
+
+//ALL BROWSERS
+
+/**
+ * Object.defineProperty
+ * 
+ * Has conflict with jQuery
+ * 
+Object.prototype.defineProperty = function(obj, prop, desc){
+    if('defineProperty' in Object){
+        try {
+            Object.defineProperty(obj, prop, desc);
+        } catch (e){
+            if (e.number === -0x7FF5EC54) {
+                desc.enumerable = false;
+                Object.defineProperty(obj, prop, desc);
+            }
+        }
+    }else{
+        obj.__defineGetter__(prop, desc.get);
+        obj.__defineSetter__(prop, desc.set);
+    }
+};
+*/
 
 /**
  * Bind method
@@ -134,8 +155,7 @@ if (!("classList" in document.createElement("a"))) {
         }
 
         var elemCtrProto    = (window.HTMLElement || window.Element).prototype,
-            ClassList,
-            ClassListProto;
+            ClassList;
 
         function merge(f, s, prop){
             for(prop in s){
@@ -226,8 +246,7 @@ if (!("classList" in document.createElement("a"))) {
 
         Object.defineProperty(elemCtrProto, 'classList', {
             get         : function(){ return new ClassList(this); },
-            enumerable  : true,
-            configurable: true
+            set         : function(){}
         });
 
     })(window);
